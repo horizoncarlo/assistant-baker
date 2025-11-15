@@ -1,11 +1,523 @@
-<html>
-    <head>
-        <meta http-equiv="Refresh" content="0;url=baker-street.html">
-        <title>🕵️ Assistant (221B Baker Street)</title>
-    </head>
-    <body style="background-color: #000000; color: #888888;">
-    <div style="width: 100%; text-align: center; padding-top: 20%;">
-	    <h2>Redirecting to the <a href="baker-street.html">Assistant (221B Baker Street)</a>...</h2>
-    </div>
-    </body>
+<!DOCTYPE html>
+<html lang="en" data-color-scheme="dark">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+  <meta name="description" content="Assistant app for the boardgame &quot;221B Baker Street&quot; (1977)">
+
+  <link rel="icon" href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text y=%22.9em%22 font-size=%2290%22&gt;%F0%9F%94%8D&lt;/text&gt;&lt;/svg&gt;">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lowlighter/matcha/dist/matcha.min.css" />
+
+  <title>🕵️ Assistant (221B Baker Street)</title>
+
+  <script>
+    const locations = [
+      "Apothecary",
+      "Bank",
+      "Carriage Depot",
+      "Dock",
+      "Hotel",
+      "Locksmith",
+      "Museum",
+      "Newspaper Shop",
+      "Park",
+      "Pawnbroker",
+      "Playhouse",
+      "Pub (Boar's Head Inn)",
+      "Scotland Yard",
+      "Tobacconist"
+    ];
+
+    const cases = [
+      {
+        no: 1, title: 'THE ADVENTURE OF THE UNHOLY MAN', details: `A strange preacher had come to town, a large Moroccan-bound Bible under his arm. Scotland Yard is puzzled when the preacher is found stabbed to death on his balcony seat at the Playhouse during a cher is found s performance of Hamlet.
+The Duchess of Tallcourt, who accompanied the victim to the Theatre, discovered the body upon returning from the powder room after the interval. The preacher's Bible was gone; and on the floor nearby were a German made cigarette and a packet of aspirin.
+It was common knowledge that the Duchess, previously a benefactor of the Bishop of Whittenfroth, had come to support the new preacher's views. This greatly angered the Bishop and the Duke of Tallcourt.
+The Longworth Acting Troupe was performing the play; the Earl of Longworth in the lead. Longworth, a rascally cad, had been wooing the Duchess' daughter, Anastasia, in hopes of gaining support for this poverty-stricken troupe.
+Scotland Yard wants to know a) who killed the preacher, b) the weapon, and c) the motive.
+The game is afoot!`, numAnswers: 3, solution: `The preacher was in fact a thief who had stolen the original manuscript of Hamlet from an exhibit on the Riviera, where he also acquired his tan. The preacher disguised the manuscript as a Bible and had Longworth authenticate it for the Duke, whom the preacher hoped would buy it. Longworth, however, in desperate need of money, killed the preacher with Hamlet's sword and stole the manuscript Longworth, who does not smoke, planted the German made cigarette near the victim's body to throw suspicion from himself, but in the process, he accidentally dropped his packet of aspirin Killer: Longworth; Weapon: Sword; Motive: Manuscript.`,
+clueMap: {
+  "Apothecary": 1,
+  "Bank": 1,
+  "Carriage Depot": 1,
+  "Dock": 1,
+  "Hotel": 1,
+  "Locksmith": 1,
+  "Museum": 1,
+  "Newspaper Shop": 6,
+  "Park": 6,
+  "Pawnbroker": 6,
+  "Playhouse": 6,
+  "Pub (Boar's Head Inn)": 6,
+  "Scotland Yard": 6,
+  "Tobacconist": 6
+}
+      },
+      {
+        no: 2, title: 'TODO BACKUP OTHER CASE', details: `Some complicated plot`, numAnswers: 2, solution: `The butler did it`
+      }
+    ];
+
+    const clues = [
+      `Earl Longworth has constant headaches.`,
+      `The knife in Foster's chest was not thrust by human hands.`,
+      `KILLER CLUE (Three Parts) III. A type of fabric.`,
+      `The floor of Silver Patch's stall contained some fresh black paint.`,
+      `MOTIVE CLUE (Four Parts) III. The alphabet letter after K.`,
+      `Colonel Sebastian Moran.`,
+      `No clue.`,
+      `Jules Ridgely purchased some pills to help his severe case of vertigo.`,
+      `WEAPON CLUE (Two Parts) I "Yo, ho,_______the man down."(Song)`,
+      `One should never attempt to christen, with a bottle full of nitroglycerin.`,
+      `Duke Tallcourt is a well-known collector of original manuscripts.`,
+      `Mr Foster and Mr T Walton had worked together as partners on a number of inventions.`,
+      `One of McSwade's hobbies is collecting gold coins.`,
+      `Sir Reginald Cosgrove had a large insurance policy on his prize horse, Silver Patch.`,
+      `At a board meeting scheduled for this afternoon, Mr Ostermann was to give a report on the Bank's profits.`,
+      `The package contained a look-alike replica of the Ziegfield necklace and a note For text of note, go to Tobacconist.`,
+      `"SURPRISE CLUE (Three parts) III More than one sip.`,
+      `WEAPON CLUE (Three Parts) III Common name for an urban area.`,
+      `The engraver was dead before the ventilator grating was removed.`,
+      `An important clue is at the Dock.`,
+      `Longworth was seen reading a Bible to the victim and Duke Tailcourt the day before the murder.`,
+      `KILLER CLUE (Two Parts) I Up against the________.`,
+      `Sir Bertram Lampfelt just returned from a recent trip to Paris.`,
+      `WEAPON CLUE (Three Parts) III Rhymes with throttle.`,
+      `MOTIVE CLUE (Four Parts) IV Past tense of the verb mean.`,
+      `Jonathan Hackett's real name is at the Apothecary.`,
+      `The carriage driver is not the Chameleon.`,
+      `Leopold Harkness is an undercover agent for British intelligence.`,
+      `MASTERMIND CLUE (Two Parts) I The alphabet letter after 0.`,
+      `A clue to the assassin's identity is at the Newspaper Shop.`,
+      `GENERAL MOTIVE CLUE You can't judge a book by it's cover.`,
+      `KILLER CLUE (Two Parts) II 2,000 pounds. (Unit of Measure)`,
+      `WEAPON CLUE (Three Parts) I Money paid for a service.`,
+      `KILLER CLUE (Two Parts) II An arrangement of fruit trees.`,
+      `KILLER CLUE (Two Parts) II The opposite of woman.`,
+      `Colonel Sebastian Moran is an adept hypnotist.`,
+      `CHAMELEON CLUE (Two Parts) II Past tense of the verb tread.`,
+      `You got here just in time to stop Boris Crepnick from leaving the country.`,
+      `There were air holes drilled into one of the packing crates that Peabody brought back from Africa.`,
+      `Hickory, dickory, dock;the mouse ran up the clock. When the clock strikes one, my task will be done Hickory, dickory, dock!`,
+      `The Duchess's daughter, Anastasia, did not like the strange preacher.`,
+      `Mr Foster and Mts Walton were seen whispering to each other in the Hotel lobby the day before the murder.`,
+      `KILLER CLUE (Three Parts) I Not variables.`,
+      `Some fresh silver paint was found on the stall floor of Night Dancer, another of Sir Reginald's horses.`,
+      `Rita Frawley and Walter Ostermann occasionally spent nights together at the Hotel.`,
+      `Colonel Sebastian Moran is an associate of the notorious Professor Moriarty`,
+      `SURPRISE' CLUE (Three Parts) II What the wind does.`,
+      `A kite and length of copper wire is found on the roof of the Hotel.`,
+      `MASTERMIND CLUE (Two Parts) II A corpse.`,
+      `A weapon clue is at the Pub.`,
+      `GENERAL WEAPON CLUE The Bible says that if you live by one, you'll die by one.`,
+      `On the bureau in Mr. Foster's Hotel room, a catapult-like fixture was secretly hooked up to Foster's cigar box.`,
+      `COMPLETE MOTIVE CLUE (Two Parts) I Grown up. II Apples grow on a______.`,
+      `No clue.`,
+      `MOTIVE CLUE (Four Parts) I The alphabet letter after L.`,
+      `"WHO'S BEHIND IT" CLUE (Four Parts) I The opposite of less. II The alphabet letter after D.`,
+      `HIDING PLACE CLUES (Four Parts) II The alphabet letter before P. III Nickname for Linda.`,
+      `KILLER CLUE (Two Parts) II A Civil War general.`,
+      `KILLER CLUE (Two Parts) II Better you than________.`,
+      `No clue.`,
+      `Earl Longworth is considered a foremost authority on the authenticity of original manuscripts.`,
+      `MOTIVE CLUES (Four Parts) II The sound a clock makes. III A gelatin dessert.`,
+      `The killer was a ham radio operator.`,
+      `MOTIVE CLUE (Three Parts) II Another word for positive or certain.`,
+      `MOTIVE CLUE (Four Parts) II The sound a bee makes.`,
+      `Sir Hyman Pearson is the curator in charge of security at the Museum's international jewel exhibit this weekend.`,
+      `No clue.`,
+      `MOTIVE CLUE (Three Parts) III Specially mixed food for a baby.`,
+      `HIDING PLACE (Two Parts) I The plates are hidden in the hollow bottom..... (Part II at the Museum).`,
+      `Stop at the Newspaper Shop.`,
+      `The original manuscript of Hamlet was stolen recently from an exhibit on the Riviera.`,
+      `No clue.`,
+      `GENERAL KILLER & MOTIVE CLUE A little birdie told her.`,
+      `MOTIVE CLUES (Three Parts) I The opposite of out. III Creatures that love picnics.`,
+      `For the past two years, Wellington Bakman has been living way above his means.`,
+      `KILLER CLUE (Two Parts) I Not short.`,
+      `The killer is a man.`,
+      `WEAPON CLUE (Three Parts) II Insects who make honey.`,
+      `KILLER CLUE (Two Parts) I Something that produces an effect.`,
+      `WEAPON CLUE (Three Parts) III "______Til The Sun Shines, Nellie" (Song)`,
+      `The Museum's jewel exhibit this weekend will feature a rare public showing of the world's most valuable collection of precious stones, the Ziegfield necklace.`,
+      `No clue.`,
+      `MOTIVE CLUE (Three Parts) II A sewer rodent.`,
+      `Mario Morelli's monkey knows how to use a slingshot.`,
+      `The letters before and after N, will give you a clue to who I am. Also the letter before F, And the letters before and after S.`,
+      `The kinetoscope pictures show Sir Hyman, with a blank look on his face, standing over the slain victims at the Thomson mansion, and removing the large diamond from the wall safe.`,
+      `CHAMELEON CLUE (Two Parts) I The opposite of more.`,
+      `Ridgely was seen talking to Boris Crepnick in the Park the day before. Ladder's death.`,
+      `WEAPON CLUE (Two Parts) II __________With The Wind (Book & Movie) 90. There is no clue at the Tobacconist.`,
+      `KILLER CLUE (Two Parts) II Value.`,
+      `MOTIVE CLUES (Four Parts) I Caesar was a_____. IV A large body of salt water.`,
+      `WEAPON CLUE (Three Parts) III The opposite of most.`,
+      `The pawnbroker's ticket at the scene of the crime belonged to Sir Reginald Cosgrove.`,
+      `KILLER CLUE (Two Parts) I The opposite of front.`,
+      `COMPLETE MOTIVE This scheme was hatched as a means of acquiring Dotn the Thomson diamond and the Ziegfield necklace.`,
+      `No clue.`,
+      `KILLER CLUE (Two Parts) I The opposite of poor.`,
+      `COMPLETE METHOD OF REMOVAL The plates were carried up the air shaft in human hands.`,
+      `No clue.`,
+      `The Bishop of Whittenfroth was in attendance at the Playhouse the night of the murder.`,
+      `The evening of the murder, Mr & Mrs Foster went to the Playhouse with Mr. & Mrs Southerington.`,
+      `No clue.`,
+      `Footprints at the stables show that the killer wore a size 12 shoe.`,
+      `WEAPON CLUE (Three Parts) I Crime doesn't________.`,
+      `"WHO'S BEHIND IT" CLUE (Four Parts) III The alphabet letter after Q IV A favorite British beverage.`,
+      `HIDING PLACE CLUE (Four Parts) I Tocompetewith IV After J's come_______.`,
+      `WEAPON CLUE (Three Parts) II Moss grows on the north side of a_________.`,
+      `The killer is a native of Africa.`,
+      `An important clue is at the Apothecary.`,
+      `No clue.`,
+      `Mr Foster and Mrs Walton were having an affair.`,
+      `Torchfield bought the cuckoo clock on a recent trip to Switzerland.`,
+      `WEAPON CLUES (Three Parts) I When you have no money, you're flat________. II The alphabet letter after M.`,
+      `Both Rita Frawley and Patrick Reardon are left-handed.`,
+      `Upon returning home from 221 B Baker Street. Sir Hyman found a second package waiting for him. To learn its contents, go to the Bank.`,
+      `"SURPRISE" CLUE (Three Parts) I The alphabet letter after W.`,
+      `WEAPON CLUE (Three Parts) I To vote into office.`,
+      `KILLER CLUE (Two Parts) I A swine or glutton.`,
+      `A bit of the bubbly will make him sky high, and if you knew the contents, you'd know why!`,
+      `The victim had a handsome tan, peculiar in London.`,
+      `No clue.`,
+      `A coroner's check revealed two dead fleas on the victim's neck.`,
+      `Bobby Jansen is now working at the Locksmith shop.`,
+      `The victim was hit on the head from behind.`,
+      `Scotland Yard has been enlisted to provide heavy security at the Museum's international jewel exhibit this weekend.`,
+      `Lestrade was taking the Chameleon to a new prison when the criminal escaped.`,
+      `No clue.`,
+      `There is a puncture the size of a pinhole at the base of the engraver's neck.`,
+      `No clue.`,
+      `The Bishop of Whittenfroth smokes German-made cigarettes.`,
+      `It was well known to Mr. Foster's friends that he rose early every morning and, before doing anything else, smoked a cigar.`,
+      `KILLER CLUE (Three Parts) II It produces light.`,
+      `Sir Reginald would never kill his prize horse. Silver Patch.`,
+      `WEAPON CLUE (Three Parts) II The sound made by a contented cat.`,
+      `TEXT OF SECOND NOTE "Replace the real Ziegfield necklace with this replica and await further instructions. If you fail to do this, we shall contact Scotland Yard and recommend they view the kinetoscope pictures in the Park."`,
+      `GENERAL CLUE The Chameleon expects to see Holmes high strung.`,
+      `MOTIVE CLUE (Three Parts) I ________and you shall find.`,
+      `HIDING PLACE (Two Parts) II ...of a Museum display case. (Part I at the Tobacconist)`,
+      `No clue.`,
+      `CODE CLUE H=I B=C`,
+      `The hunk of candle found by Holmes was from a heavy decorative candle approximateIy two kilograms (six pounds) in weight. It's safe to assume that a man taking a candle for the purpose of lighting his way, would use a much smaller candle.`,
+      `No clue.`,
+      `J S. Subkow takes little yellow pills regularly for a liver condition.`,
+      `The weapon and the courier's valise were thrown overboard.`,
+      `CODE CLUE O=P`,
+      `KILLER CLUE (Four Parts) I The opposite of lose.`,
+      `MOTIVE CLUES (Four Parts) II The Merchant______ Venice (Play) III Another name for prostitute.`,
+      `While mopping the Bank floor last Saturday, maintenance man Harvey Willis says he heard a noise like a firecracker which seemed to come from the architects' office next store.`,
+      `Prescott's ship is being repossessed.`,
+      `CODE CLUE Z=A X=Y`,
+      `COMPLETE WEAPON CLUES I A cylindrical tin container II The opposite of sharp or bright.`,
+      `KIDNAPPER CLUE (Three Parts) III "Let him who has not sinned cast the first______.`,
+      `KILLER CLUES (Four Parts) _______'s Well That Ends Well (Play) IV A doctor's assistant; usually a woman.`,
+      `FORTUNE CLUE (Two Parts) I Not medium or well done.`,
+      `The message contains three words.`,
+      `MOTIVE CLUES (Three Parts) I Another name for a hotel or lodge. II Strands that grow from the scalp.`,
+      `WHEREABOUTS CLUE (Three Parts) I Bass, trout and perch are_______.`,
+      `KILLER CLUES (Four Parts) II Expression used in golf to warn someone of an oncoming ball. III A portion or section; not the whole thing.`,
+      `Holmes noticed a streak of rust between the thumb and forefinger of Captain Prescott's right hand.`,
+      `CODE CLUE K=L`,
+      `While Mrs. Dunphy disdained all social activities. Mr. Dunphy yearned for a more active night life.`,
+      `KIDNAPPER CLUE (Three Parts) I Name for a cowboy's lasso.`,
+      `MOTIVE CLUES (Four Parts) I Common name for a blanket or bed quilt. II The opposite of down.`,
+      `KILLER CLUE (Two Parts) II A collapsible unit expressly made for sleeping upon.`,
+      `CODE CLUE M=N`,
+      `KILLER CLUE (Four Parts) IV A famous giant said: "________, fi, fo, fum!"`,
+      `KIDNAPPER CLUE (Three Parts) II The color of some grapefruit.`,
+      `George Netter had a new house key made on Monday.`,
+      `WEAPON CLUE (Two Parts) II Painful twist of a joint.`,
+      `The Eyes of Lucifer were too "hot" for Hickel to unload. He still had the precious pearls in his possession when he died.`,
+      `Mrs. Dunphy often argued with her husband about the way he squandered her money.`,
+      `MOTIVE CLUE (Four Parts) I Most wine should be served______.`,
+      `William Skottle, basically an honest man, had for some time been bothered by strong pangs of guilt.`,
+      `Lawyer James Pushkin is an authority on rare coins and stamps.`,
+      `CODE CLUE C=D`,
+      `KILLER CLUE (Four Parts) III Completed; finished.`,
+      `WHEREABOUTS CLUE (Three Parts) III Sits on water and rhymes with float.`,
+      `A woman who lives above the Newspaper Shop says she saw three or four men get out of a private carriage in the back alley last Saturday afternoon.`,
+      `No clue.`,
+      `CODE CLUE R=S`,
+      `Where a seated man will always cross his legs to catch a thrown object in his lap, a seated woman will usually spread her legs apart to catch the object in her skirt.`,
+      `Harriet Pinkston has worked as a governess and nanny for nearly twenty years.`,
+      `MOTIVE CLUES (Four Parts) III Niagara_______. IV Discs you play on a phonograph.`,
+      `KILLER CLUE (Two Parts) I A button on machinery might read this.`,
+      `No clue.`,
+      `Mrs. Dunphy has a gardener named Winthrop Capp.`,
+      `Harriet Pinkston's husband, Carl Pinkston, is a fisherman.`,
+      `Although there was the smell of beer on Skottle's lips, a coroner's report showed no alcohol in his bloodstream.`,
+      `There is no blood on the walking stick.`,
+      `WEAPON CLUE (trwo Parts) I A jungle creature who likes bananas.`,
+      `CODE CLUE D=E`,
+      `Holmes noticed that Mrs: Dunphy was wearing no wedding ring; nor was there a ring mark on any of her fingers.`,
+      `No clue.`,
+      `Skottle's firm had been falsifying records to conceal the company's continually worsening financial situation.`,
+      `The message tells where the Eyes of Lucifer are hidden.`,
+      `MOTIVE CLUE (Three Parts) III Boy Scouts know how to pitch________`,
+      `WHEREABOUTS CLUE (Three Parts) II "_______a song of sixpence"`,
+      `The carpet in Thomas Jones' office contains two freshly cleaned spots. One of them has the slight smell of beer.`,
+      `No clue.`,
+      `The translated message must be read backwards.`,
+      `Mr. Dunphy knew that he was not the sole benefactor of his wife's will. In fact, Mrs. Dunphy's will leaves most of her inheritance to charity.`,
+      `MOTIVE CLUE (Four Parts) IV To possess something. (Rhymes with moan.)`,
+      `Thomas Jones and George Netter were seen drinking at the Pub Saturday afternoon.`,
+      `Holmes has the fortune in his pocket.`,
+      `CODE CLUE Q=R`,
+      `KILLER CLUE (Four Parts) II A rolling ______gathers no moss.`,
+      `Harriet Pinkston is not able to have a baby of her own.`,
+      `Arthur Kendrick smokes Turkish cigars.`,
+      `FORTUNE CLUE (Two Parts) II Necessary to mail a letter.`,
+      `Holmes knows that any person actually involved in the Erse Kernes would use the old Gaelic spelling of Ireland-ERIU-instead of ERIN.`,
+      `The clothes of the three victims had a dank smell, not unlike that found in a boiler room.`,
+      `MOTIVE CLUES (Five Parts) I The number after nine. II A track of grassland; especially in the Western USA.`,
+      `THIEF CLUE (Two Parts) I A part of the foot.`,
+      `No clue.`,
+      `Actress Erin McCann is starring in the current production of The Taming of the Shrew.`,
+      `The ground between Scotland Yard and the Bank is composed of rich, black mud.`,
+      `Clara Wexler is innocent.`,
+      `HIDING PLACE CLUE (Two Parts) I One of four in a deck of cards.`,
+      `No clue.`,
+      `MOTIVE CLUE (Two Parts) I The darkest color in the spectrum.`,
+      `The largest shipment of gold ever to reach London will arrive later this month for storage in the Bank vault.`,
+      `Myra Hyatt is innocent.`,
+      `MOTIVE CLUE (Three Parts) II Missing vowel in A, I, 0, U.`,
+      `The shot that killed Tom Dayton was fired from outside the porthole.`,
+      `COMPLETE KILLER CLUE A person who prepares food.`,
+      `Attached to the rear of the Scotland Yard building, is an abandoned bungalow which has a deep cellar and boiler room.`,
+      `Michael Milligan is innocent.`,
+      `No clue.`,
+      `Only one bullet was fired from Stanley Bosworth's revolver.`,
+      `WEAPON CLUE (Two Parts) I Cyclops had only one of these.`,
+      `There is a KILLER CLUE at the Newspaper Shop.`,
+      `COMPLETE WEAPON CLUES I A is the first________ of the alphabet. II The first ball game of the season is known as the season________.`,
+      `HIDING PLACE CLUE (Two Parts) II Belongs to Kay.`,
+      `Although everyone on the yacht heard two shots, Tom Dayton had only one bullet in his forehead.`,
+      `Manfred Maloney had documents relating to Donald Hobson's disgraceful past.`,
+      `MOTIVE CLUES (Four Parts) III The number after one. IV The Sound a gun makes.`,
+      `Eugene Kane often teased the postman about being tardy with the mail.`,
+      `MOTIVE CLUE (Three Parts) I Nickname for Alexander Graham Bell's best known invention.`,
+      `Doctor Peerpoint reveals that Tom Dayton was terminally ill, with only a few weeks to live.`,
+      `WEAPON CLUE (Two Parts) II The USSR emblem is the hammer and_______.`,
+      `MOTIVE CLUES (Four Parts) I The number after nine. II The alphabet letter after K.`,
+      `No clue.`,
+      `Heelwright's malaria was cutting his expedition short.`,
+      `Tom Dayton was not killed with Stanley Bosworth's gun.`,
+      `While stationed in Ireland years ago, Donald Hobson was dishonorably discharged from the British military for illegal mistreatment of civilians.`,
+      `KILLER CLUE (Three Parts) I A seed of corn.`,
+      `Grant Evans, the postman who services Mrs Farr's neighborhood, is often late and often leaves mail at the wrong addresses.`,
+      `THIEF CLUE (Two Parts) II It can be done with a pen or pencil.`,
+      `MOTIVE CLUE (Two Parts) I Rhymes with tactical.`,
+      `GENERAL WEAPON CLUE The weapon is the water.`,
+      `WEAPON CLUE (Two Parts) II The alphabet letter after K.`,
+      `MOTIVE CLUE (Five Parts) IV ______CIaus.`,
+      `MOTIVE CLUE (Three Parts) III Slang for dice or dominoes.`,
+      `MOTIVE CLUE (Two Parts) II Rhymes with bloke.`,
+      `MOTIVE CLUE (Two Parts) II The opposite of female.`,
+      `No clue.`,
+      `Daniel Kirwin is innocent.`,
+      `The Sumatra Bones were not in the packing cases when the cases arrived at the Museum.`,
+      `No clue.`,
+      `Alfred Cooke's real name is Donald Hobson.`,
+      `KILLER CLUES (Three Parts) II The opposite of less. III Henry VIII divorced Katherine to marry_________ Bullen.`,
+      `MOTIVE CLUE (Five Parts) V When driving a golf ball, most players set the ball on a_______.`,
+      `Heelwright's greatest desire is to make some notable archeological discovery during his lifetime.`,
+      `The actual murder weapon is under water.`,
+      `As British soldiers nearly twenty years ago, Manfred Maloney and Donald Hobson were stationed together in Ireland.`,
+      `WEAPON CLUE (Two Parts) I Another word for push. (Rhymes with glove.)`,
+      `Wilma Farr is innocent.`,
+      `The Dacking cases die not come open in the crash, nor were they tampered with.`,
+      `KILLER CLUE (Two Parts) II The number before eleven.`,
+      `No clue.`,
+      `GENERAL KILLER AND MOTIVE CLUE He had them do his dirty work.`,
+      `MOTIVE CLUE (Five Parts) III The opposite of out.`,
+      `Archibald has no scholarly background in archeology.`,
+      `KILLER CLUE (Two Parts) I Part of a month.`,
+      `In the photograph, Maloney is smoking his pipe with his left hand.`,
+      `Colonel Sebastian Moran, an associate of the notorious Professor James Moriarty, is of medium height, medium build and around forty years of age.`,
+      `Grant Evans, the postman who services Mrs Farr's neighborhood, is often late and often leaves mail at the wrong addresses.`,
+      `Holmes notices a speck of dust leaking ~from the bottom of Heelwright's suitcase.`,
+      `KILLER CLUES are at the Pawnbroker (I) and at the Park (II).`
+    ];
+  </script>
+  
+  <style>
+    body {
+      max-width: 1200px; /* Matcha.css override */
+    }
+    
+    h2 {
+      text-align: center; /* Override */
+    }
+    
+    #app {
+      width: 100%;
+    }
+    
+    #app button {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="app"></div>
+
+  <script>
+    const STEP_CHOOSE_CASE = 'chooseCase';
+    const STEP_CHOOSE_LOCATION = 'chooseLocation';
+    const state = reactive(
+      {
+        currentCase: null,
+        screenStep: STEP_CHOOSE_CASE,
+        showSolution: false,
+        showLocationButtons: true,
+        showCaseDetails: false,
+        locationMap: Object.fromEntries(
+          locations.map(key => [key, false])
+        )
+      },
+      (prop, value) => {
+        render();
+      }
+    );
+
+    function chooseCase(caseNo) {
+      state.currentCase = cases.find(c => caseNo === c.no);
+    }
+    
+    function startCase() {
+      state.screenStep = STEP_CHOOSE_LOCATION;
+    }
+
+    function checkLocation(atIndex) {
+      // Mark that we visited this location, which will reveal the clue text on the next render
+      state.locationMap[locations[atIndex]] = true;
+    }
+    
+    function showSolution(e) {
+      e.preventDefault();
+      
+      state.showSolution = true;
+      setTimeout(() => {
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+    }
+    
+    function toggleShowLocationButtons() {
+      state.showLocationButtons = !state.showLocationButtons;
+    }
+    
+    function toggleShowCaseDetails() {
+      state.showCaseDetails = !state.showCaseDetails;
+    }
+    
+    function renderCases() {
+      return `<h2>Choose Case</h2>` +
+        cases
+          .map(c => {
+            let toReturn = `<button type="button" onclick="chooseCase(${c.no})"><b>#${c.no}</b> ${c.title}</button><br/>`;
+            
+            if (state.currentCase?.no === c.no) {
+              toReturn += `<p style="width: 90%;">${state.currentCase.details}</p>
+              <div class="centered">
+              <button type="button" onclick="startCase()" style="width: 50%;" class="success">Start Case #${state.currentCase.no}</button>
+              </div>`;
+            }
+            
+            return toReturn;
+          }).join('');
+    }
+
+    function renderLocations() {
+      const answerHTML =
+        Array.from({ length: state.currentCase.numAnswers }, (_, i) => `${String.fromCharCode(65 + i)} <input type="text" required></input>`).join('');
+      const solutionHTML = state.showSolution ?
+        `<button type="button" class="success" onclick="window.location.reload()">⟳ Restart</button>Case ${state.currentCase.no} Solution:<blockquote>${state.currentCase.solution}</blockquote>` :
+        '<hr/><button type="submit" class="attention">⚡ Show Solution</button>';
+      
+      return `<h2>Choose Location</h2>` +
+        (Object.values(state.locationMap).some(Boolean) ?
+          `<div style="padding-bottom: 20px;">
+           <label class="inline"><input type="checkbox" onchange="toggleShowLocationButtons()" ${state.showLocationButtons ? 'checked="true"' : ''}></input> Show Visited Names?</label>
+           <label class="inline" style="padding-left: 10%;"><input type="checkbox" onchange="toggleShowCaseDetails()" ${state.showCaseDetails ? 'checked="true"' : ''}></input> Show Case Details?</label>
+           </div>`
+          : ''
+        ) +
+        (state.showCaseDetails ?
+          `<p style="font-size: smaller; width: 90%;">${state.currentCase.details}</p>`
+          : ''
+        ) +
+        locations
+          .map((location, index) => {
+            // If we've visited the location show the clue instead
+            if (state.locationMap[location]) {
+              const matchingClueNo = state.currentCase.clueMap[location];
+              const matchingClueText = clues[matchingClueNo];
+              return (state.showLocationButtons ? `<button disabled="true" class="muted">${location}</button><br/>` : '') +
+                `${matchingClueText}<br/>`;
+            }
+            else {
+              return `<button type="button" onclick="checkLocation(${index})">${location}</button><br/>`
+            }
+          })
+          .join('') +
+        `<hr/><form onsubmit="showSolution(event)">` +
+        (state.showSolution ? '' : (`<h2>Guess Solution</h2>` + answerHTML)) +
+        solutionHTML +
+        `</form><br/>`;
+    }
+
+    function content(someHTML) {
+      document.getElementById('app').innerHTML = someHTML;
+    }
+
+    function render() {
+      switch (state.screenStep) {
+        case STEP_CHOOSE_CASE:
+          content(renderCases());
+          break;
+        case STEP_CHOOSE_LOCATION:
+          content(renderLocations());
+          break;
+        default:
+          console.error("Unknown render step", state.screenStep);
+      }
+    }
+    
+    // Baby's first custom reactivity with Proxy setup
+    function reactive(obj, onChange) {
+      const handler = {
+        get(target, prop, receiver) {
+          const value = target[prop];
+
+          if (value !== null && typeof value === 'object') {
+            return reactive(value, onChange);
+          }
+
+          return value;
+        },
+
+        set(target, prop, value) {
+          const oldValue = target[prop];
+          if (oldValue === value) {
+            return true;
+          }
+          
+          target[prop] = value; 
+
+          onChange(prop, value);
+          
+          return true;
+        }
+      };
+
+      return new Proxy(obj, handler);
+    }
+
+    // Initial render
+    render();
+  </script>
+</body>
 </html>
