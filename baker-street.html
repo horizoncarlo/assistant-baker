@@ -372,6 +372,7 @@ clueMap: {
       {
         screenStep: STEP_CHOOSE_CASE,
         showSolution: false,
+        showButtons: true,
         locationMap: Object.fromEntries(
           locations.map(key => [key, false])
         )
@@ -400,6 +401,10 @@ clueMap: {
       });
     }
     
+    function toggleShowButtons() {
+      state.showButtons = !state.showButtons;
+    }
+    
     function renderCases() {
       return `<h2>Choose Case</h2>` +
         cases
@@ -415,13 +420,15 @@ clueMap: {
         '<hr/><button type="submit" class="attention">⚡ Show Solution</button>';
       
       return `<h2>Choose Location</h2>` +
+        `<label><input type="checkbox" onchange="toggleShowButtons()"></input> Show Visited?</label>` +
         locations
           .map((location, index) => {
             // If we've visited the location show the clue instead
             if (state.locationMap[location]) {
               const matchingClueNo = currentCase.clueMap[location];
               const matchingClueText = clues[matchingClueNo];
-              return `<button disabled="true" class="muted">${location}</button><br/>${matchingClueText}<br/>` 
+              return (state.showButtons ? `<button disabled="true" class="muted">${location}</button><br/>` : '') +
+                `${matchingClueText}<br/>`;
             }
             else {
               return `<button onclick="checkLocation(${index})">${location}</button><br/>`
