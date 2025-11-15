@@ -357,6 +357,11 @@ clueMap: {
     #app button {
       width: 100%;
     }
+    
+    .case-details {
+      width: 90%;
+      font-size: smaller;
+    }
   </style>
 </head>
 
@@ -389,6 +394,10 @@ clueMap: {
     
     function startCase() {
       state.screenStep = STEP_CHOOSE_LOCATION;
+      
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+      });
     }
 
     function checkLocation(atIndex) {
@@ -420,9 +429,9 @@ clueMap: {
             let toReturn = `<button type="button" onclick="chooseCase(${c.no})"><b>#${c.no}</b> ${c.title}</button><br/>`;
             
             if (state.currentCase?.no === c.no) {
-              toReturn += `<p style="width: 90%;">${state.currentCase.details}</p>
-              <div class="centered">
-              <button type="button" onclick="startCase()" style="width: 50%;" class="success">Start Case #${state.currentCase.no}</button>
+              toReturn += `<p class="case-details">${state.currentCase.details}</p>
+              <div class="centered" style="padding-bottom: 20px;">
+              <button type="button" onclick="startCase()" style="width: 60%;" class="success">✅ Start Case #${state.currentCase.no}</button>
               </div>`;
             }
             
@@ -440,13 +449,13 @@ clueMap: {
       return `<h2>Choose Location</h2>` +
         (Object.values(state.locationMap).some(Boolean) ?
           `<div style="padding-bottom: 20px;">
-           <label class="inline"><input type="checkbox" onchange="toggleShowLocationButtons()" ${state.showLocationButtons ? 'checked="true"' : ''}></input> Show Visited Names?</label>
-           <label class="inline" style="padding-left: 10%;"><input type="checkbox" onchange="toggleShowCaseDetails()" ${state.showCaseDetails ? 'checked="true"' : ''}></input> Show Case Details?</label>
+           <label><input type="checkbox" onchange="toggleShowLocationButtons()" ${state.showLocationButtons ? 'checked="true"' : ''}></input> Show Visited Names?</label>
+           <label><input type="checkbox" onchange="toggleShowCaseDetails()" ${state.showCaseDetails ? 'checked="true"' : ''}></input> Show Case Details?</label>
            </div>`
           : ''
         ) +
         (state.showCaseDetails ?
-          `<p style="font-size: smaller; width: 90%;">${state.currentCase.details}</p>`
+          `<p class="case-details">${state.currentCase.details}</p>`
           : ''
         ) +
         locations
