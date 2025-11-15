@@ -420,7 +420,10 @@ clueMap: {
         '<hr/><button type="submit" class="attention">⚡ Show Solution</button>';
       
       return `<h2>Choose Location</h2>` +
-        `<label><input type="checkbox" onchange="toggleShowButtons()"></input> Show Visited?</label>` +
+        (Object.values(state.locationMap).some(Boolean) ?
+          `<label><input type="checkbox" onchange="toggleShowButtons()" ${state.showButtons ? 'checked="true"' : ''}></input> Show Visited?</label>` :
+          ''
+        ) +
         locations
           .map((location, index) => {
             // If we've visited the location show the clue instead
